@@ -201,7 +201,7 @@ export default function DashboardPage() {
         style={{
           backgroundColor: "#ffffff",
           borderBottom: "1px solid #e5e7eb",
-          padding: "16px 20px",
+          padding: "clamp(12px, 3vw, 16px) clamp(16px, 4vw, 20px)",
         }}
       >
         <div
@@ -212,15 +212,15 @@ export default function DashboardPage() {
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "16px",
+            gap: "clamp(12px, 3vw, 24px)",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "6px",
-              fontSize: "clamp(18px, 5vw, 24px)",
+              gap: "clamp(4px, 1vw, 6px)",
+              fontSize: "clamp(16px, 4vw, 24px)",
               fontWeight: "700",
               color: "#000000",
             }}
@@ -230,7 +230,7 @@ export default function DashboardPage() {
               alt="BeeSeek"
               width={50}
               height={50}
-              style={{ objectFit: "contain", maxWidth: "40px" }}
+              style={{ objectFit: "contain", maxWidth: "clamp(30px, 8vw, 40px)" }}
             />
             BeeSeek
           </div>
@@ -239,13 +239,14 @@ export default function DashboardPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "clamp(12px, 3vw, 24px)",
+              gap: "clamp(8px, 2vw, 16px)",
               flexWrap: "wrap",
+              justifyContent: "flex-end",
             }}
           >
             <div
               style={{
-                fontSize: "clamp(12px, 2.5vw, 14px)",
+                fontSize: "clamp(11px, 2vw, 14px)",
                 fontWeight: "600",
                 color: "#000000",
               }}
@@ -262,15 +263,16 @@ export default function DashboardPage() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "clamp(4px, 1vw, 8px)",
                 backgroundColor: "#ffffff",
                 color: "#549fe5",
-                padding: "10px 20px",
+                padding: "clamp(6px, 1.5vw, 10px) clamp(12px, 2.5vw, 20px)",
                 borderRadius: "6px",
                 fontWeight: "600",
-                fontSize: "14px",
+                fontSize: "clamp(11px, 2vw, 14px)",
                 cursor: "pointer",
                 border: "1px solid #549fe5",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#549fe5";
@@ -369,10 +371,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Header */}
-        <div style={{ marginBottom: "24px" }}>
+        <div style={{ marginBottom: "clamp(16px, 3vw, 24px)" }}>
           <h1
             style={{
-              fontSize: "32px",
+              fontSize: "clamp(24px, 6vw, 32px)",
               fontWeight: "900",
               color: "#000000",
               marginBottom: "8px",
@@ -382,7 +384,7 @@ export default function DashboardPage() {
           </h1>
           <p
             style={{
-              fontSize: "14px",
+              fontSize: "clamp(12px, 2.5vw, 14px)",
               color: "#6b7280",
             }}
           >

@@ -343,7 +343,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <button
-              onClick={fetchContacts}
+              onClick={() => fetchContacts()}
               style={{
                 display: "flex",
                 alignItems: "center",

@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
 
     const now = new Date().toISOString();
 
-    // Get current active contacts for this manager
-    const { data: activeContacts, error: activeError } = await supabaseAdmin
+    // Get all messaged contacts for this manager (permanent - no expiration check)
+    const { data: messagedContacts, error: messagedError } = await supabaseAdmin
       .from('manager_contacts')
       .select(`
         id,
@@ -41,20 +41,51 @@ export async function GET(request: NextRequest) {
         )
       `)
       .eq('manager_id', user.id)
+      .eq('messaged', true)
+      .order('messaged_at', { ascending: false });
+
+    if (messagedError) throw messagedError;
+
+    // Get unmessaged contacts for today (with expiration at end of day)
+    const { data: unmessagedContacts, error: unmessagedError } = await supabaseAdmin
+      .from('manager_contacts')
+      .select(`
+        id,
+        contact_id,
+        assigned_at,
+        expires_at,
+        messaged,
+        converted,
+        rejected,
+        messaged_at,
+        converted_at,
+        rejected_at,
+        notes,
+        contacts (
+          contact_id,
+          username,
+          business,
+          social_media,
+          profile_link,
+          location
+        )
+      `)
+      .eq('manager_id', user.id)
+      .eq('messaged', false)
       .gte('expires_at', now)
       .order('assigned_at', { ascending: true });
 
-    if (activeError) throw activeError;
+    if (unmessagedError) throw unmessagedError;
 
-    // If manager has less than 5 active contacts, assign new ones
-    const currentCount = activeContacts?.length || 0;
+    // If manager has less than 5 unmessaged contacts, assign new ones
+    const unmessagedCount = unmessagedContacts?.length || 0;
     
-    if (currentCount < 5) {
-      const needed = 5 - currentCount;
+    if (unmessagedCount < 5) {
+      const needed = 5 - unmessagedCount;
       await assignContactsToManager(user.id, needed);
       
-      // Re-fetch after assignment
-      const { data: updatedContacts, error: refetchError } = await supabaseAdmin
+      // Re-fetch unmessaged contacts after assignment
+      const { data: updatedUnmessaged, error: refetchError } = await supabaseAdmin
         .from('manager_contacts')
         .select(`
           id,
@@ -78,15 +109,20 @@ export async function GET(request: NextRequest) {
           )
         `)
         .eq('manager_id', user.id)
+        .eq('messaged', false)
         .gte('expires_at', now)
         .order('assigned_at', { ascending: true });
 
       if (refetchError) throw refetchError;
 
-      return NextResponse.json({ contacts: updatedContacts || [] });
+      // Combine messaged + updated unmessaged contacts
+      const allContacts = [...(messagedContacts || []), ...(updatedUnmessaged || [])];
+      return NextResponse.json({ contacts: allContacts });
     }
 
-    return NextResponse.json({ contacts: activeContacts || [] });
+    // Combine messaged + unmessaged contacts
+    const allContacts = [...(messagedContacts || []), ...(unmessagedContacts || [])];
+    return NextResponse.json({ contacts: allContacts });
   } catch (error) {
     console.error('Error fetching contacts:', error);
     return NextResponse.json(
@@ -100,7 +136,10 @@ export async function GET(request: NextRequest) {
 async function assignContactsToManager(managerId: number, count: number) {
   try {
     const now = new Date();
-    const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
+    
+    // Calculate end of today (midnight)
+    const expiresAt = new Date(now);
+    expiresAt.setHours(23, 59, 59, 999); // Set to end of today
 
     // Get all contact IDs that are currently assigned and not expired
     const { data: assignedContactIds } = await supabaseAdmin

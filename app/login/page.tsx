@@ -47,12 +47,13 @@ export default function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#f3f4f6",
+        padding: "20px",
       }}
     >
       <div
         style={{
           backgroundColor: "#ffffff",
-          padding: "48px",
+          padding: "clamp(32px, 8vw, 48px)",
           borderRadius: "8px",
           border: "1px solid #e5e7eb",
           width: "100%",
@@ -65,8 +66,8 @@ export default function LoginPage() {
           onClick={() => router.push("/")}
           style={{
             position: "absolute",
-            top: "24px",
-            left: "24px",
+            top: "clamp(16px, 4vw, 24px)",
+            left: "clamp(16px, 4vw, 24px)",
             display: "flex",
             alignItems: "center",
             gap: "8px",
@@ -112,7 +113,7 @@ export default function LoginPage() {
         <div style={{ marginBottom: "32px", textAlign: "center" }}>
           <h1
             style={{
-              fontSize: "28px",
+              fontSize: "clamp(24px, 6vw, 28px)",
               fontWeight: "700",
               color: "#000000",
               marginBottom: "8px",
@@ -122,7 +123,7 @@ export default function LoginPage() {
           </h1>
           <p
             style={{
-              fontSize: "14px",
+              fontSize: "clamp(12px, 3vw, 14px)",
               color: "#6b7280",
             }}
           >

@@ -201,7 +201,7 @@ export default function DashboardPage() {
         style={{
           backgroundColor: "#ffffff",
           borderBottom: "1px solid #e5e7eb",
-          padding: "20px 40px",
+          padding: "16px 20px",
         }}
       >
         <div
@@ -211,6 +211,8 @@ export default function DashboardPage() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
           }}
         >
           <div
@@ -218,7 +220,7 @@ export default function DashboardPage() {
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "24px",
+              fontSize: "clamp(18px, 5vw, 24px)",
               fontWeight: "700",
               color: "#000000",
             }}
@@ -228,7 +230,7 @@ export default function DashboardPage() {
               alt="BeeSeek"
               width={50}
               height={50}
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "contain", maxWidth: "40px" }}
             />
             BeeSeek
           </div>
@@ -237,12 +239,13 @@ export default function DashboardPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "24px",
+              gap: "clamp(12px, 3vw, 24px)",
+              flexWrap: "wrap",
             }}
           >
             <div
               style={{
-                fontSize: "14px",
+                fontSize: "clamp(12px, 2.5vw, 14px)",
                 fontWeight: "600",
                 color: "#000000",
               }}
@@ -290,7 +293,7 @@ export default function DashboardPage() {
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "40px",
+          padding: "clamp(24px, 6vw, 40px)",
         }}
       >
         {/* Timer Card */}
@@ -299,7 +302,7 @@ export default function DashboardPage() {
             backgroundColor: "#ffffff",
             borderRadius: "8px",
             border: "1px solid #e5e7eb",
-            padding: "24px",
+            padding: "clamp(16px, 4vw, 24px)",
             marginBottom: "24px",
           }}
         >
@@ -308,24 +311,26 @@ export default function DashboardPage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "clamp(12px, 3vw, 20px)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <Clock size={24} color="#549fe5" />
+            <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 12px)" }}>
+              <Clock size={20} color="#549fe5" style={{ minWidth: "20px" }} />
               <div>
                 <p
                   style={{
-                    fontSize: "14px",
+                    fontSize: "clamp(12px, 2vw, 14px)",
                     fontWeight: "600",
                     color: "#6b7280",
                     marginBottom: "4px",
                   }}
                 >
-                  Time Until Contact List Refresh
+                  Time Until End of Day Refresh
                 </p>
                 <p
                   style={{
-                    fontSize: "24px",
+                    fontSize: "clamp(18px, 5vw, 24px)",
                     fontWeight: "700",
                     color: "#000000",
                   }}
@@ -342,12 +347,13 @@ export default function DashboardPage() {
                 gap: "8px",
                 backgroundColor: "#f3f4f6",
                 color: "#000000",
-                padding: "10px 16px",
+                padding: "clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px)",
                 borderRadius: "6px",
                 fontWeight: "600",
-                fontSize: "14px",
+                fontSize: "clamp(12px, 2vw, 14px)",
                 cursor: "pointer",
                 border: "1px solid #e5e7eb",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#e5e7eb";
@@ -356,7 +362,7 @@ export default function DashboardPage() {
                 e.currentTarget.style.backgroundColor = "#f3f4f6";
               }}
             >
-              <RefreshCw size={18} />
+              <RefreshCw size={18} style={{ minWidth: "18px" }} />
               Refresh
             </button>
           </div>
@@ -380,7 +386,7 @@ export default function DashboardPage() {
               color: "#6b7280",
             }}
           >
-            You have {contacts.length} contacts to work with. Message them before the timer runs out!
+            You have {contacts.length} contacts. Message new contacts before the timer runs out. Messaged contacts stay with you.
           </p>
         </div>
 
@@ -393,7 +399,8 @@ export default function DashboardPage() {
             overflow: "hidden",
           }}
         >
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
             <thead>
               <tr style={{ backgroundColor: "#f3f4f6", borderBottom: "1px solid #e5e7eb" }}>
                 <th style={{ padding: "16px", textAlign: "left", fontSize: "12px", fontWeight: "700", color: "#6b7280", textTransform: "uppercase" }}>
@@ -650,6 +657,7 @@ export default function DashboardPage() {
               </button>
             </div>
           )}
+            </div>
         </div>
       </main>
     </div>

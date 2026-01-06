@@ -15,7 +15,7 @@ export default function Home() {
         style={{
           backgroundColor: "#ffffff",
           borderBottom: "1px solid #e5e7eb",
-          padding: "20px 40px",
+          padding: "20px 24px",
         }}
       >
         <div
@@ -25,6 +25,8 @@ export default function Home() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
           }}
         >
           <div
@@ -32,7 +34,7 @@ export default function Home() {
               display: "flex",
               alignItems: "center",
               gap: "5px",
-              fontSize: "24px",
+              fontSize: "clamp(18px, 5vw, 24px)",
               fontWeight: "700",
               color: "#000000",
             }}
@@ -42,7 +44,7 @@ export default function Home() {
               alt="BeeSeek"
               width={50}
               height={50}
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "contain", maxWidth: "40px" }}
             />
             BeeSeek
           </div>
@@ -50,8 +52,9 @@ export default function Home() {
           <nav
             style={{
               display: "flex",
-              gap: "24px",
+              gap: "12px",
               alignItems: "center",
+              flexWrap: "wrap",
             }}
           >
             <a
@@ -62,8 +65,9 @@ export default function Home() {
                 gap: "8px",
                 color: "#549fe5",
                 fontWeight: "600",
-                fontSize: "14px",
+                fontSize: "clamp(12px, 2.5vw, 14px)",
                 cursor: "pointer",
+                padding: "8px 12px",
               }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.opacity = "0.8")
@@ -73,7 +77,8 @@ export default function Home() {
               }
             >
               <LogIn size={18} />
-              Login
+              <span style={{ display: "none" }}>Login</span>
+              <span style={{ display: "inline" }}>Login</span>
             </a>
             <a
               href="/admin/login"
@@ -83,10 +88,10 @@ export default function Home() {
                 gap: "8px",
                 backgroundColor: "#549fe5",
                 color: "#ffffff",
-                padding: "10px 20px",
+                padding: "8px 16px",
                 borderRadius: "6px",
                 fontWeight: "600",
-                fontSize: "14px",
+                fontSize: "clamp(12px, 2.5vw, 14px)",
                 cursor: "pointer",
               }}
               onMouseEnter={(e) =>
@@ -97,7 +102,7 @@ export default function Home() {
               }
             >
               <UserPlus size={18} />
-              Admin
+              <span>Admin</span>
             </a>
           </nav>
         </div>
@@ -108,7 +113,7 @@ export default function Home() {
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "60px 40px",
+          padding: "clamp(40px, 8vw, 60px) clamp(20px, 6vw, 40px)",
         }}
       >
         <div
@@ -118,7 +123,7 @@ export default function Home() {
         >
           <h1
             style={{
-              fontSize: "36px",
+              fontSize: "clamp(28px, 7vw, 36px)",
               fontWeight: "900",
               color: "#000000",
               marginBottom: "12px",
@@ -128,7 +133,7 @@ export default function Home() {
           </h1>
           <p
             style={{
-              fontSize: "16px",
+              fontSize: "clamp(14px, 4vw, 16px)",
               color: "#6b7280",
               fontWeight: "400",
             }}

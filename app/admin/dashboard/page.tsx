@@ -215,7 +215,7 @@ export default function AdminDashboard() {
         style={{
           backgroundColor: "#ffffff",
           borderBottom: "1px solid #e5e7eb",
-          padding: "20px 40px",
+          padding: "16px 20px",
         }}
       >
         <div
@@ -225,6 +225,8 @@ export default function AdminDashboard() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
           }}
         >
           <div
@@ -232,7 +234,7 @@ export default function AdminDashboard() {
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              fontSize: "24px",
+              fontSize: "clamp(18px, 5vw, 24px)",
               fontWeight: "700",
               color: "#000000",
             }}
@@ -242,12 +244,12 @@ export default function AdminDashboard() {
               alt="BeeSeek"
               width={32}
               height={32}
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "contain", maxWidth: "28px" }}
             />
             BeeSeek Admin
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 24px)", flexWrap: "wrap" }}>
             <button
               onClick={() => setShowAddModal(true)}
               style={{
@@ -256,10 +258,10 @@ export default function AdminDashboard() {
                 gap: "8px",
                 backgroundColor: "#10b981",
                 color: "#ffffff",
-                padding: "10px 20px",
+                padding: "8px 16px",
                 borderRadius: "6px",
                 fontWeight: "600",
-                fontSize: "14px",
+                fontSize: "clamp(12px, 2.5vw, 14px)",
                 cursor: "pointer",
                 border: "none",
               }}
@@ -271,7 +273,8 @@ export default function AdminDashboard() {
               }}
             >
               <Plus size={18} />
-              Add Contact
+              <span style={{ display: "none" }}>Add Contact</span>
+              <span>Add</span>
             </button>
             <button
               onClick={handleLogout}
@@ -309,15 +312,15 @@ export default function AdminDashboard() {
         style={{
           maxWidth: "1600px",
           margin: "0 auto",
-          padding: "40px",
+          padding: "clamp(24px, 6vw, 40px)",
         }}
       >
         <h1
           style={{
-            fontSize: "32px",
+            fontSize: "clamp(26px, 6vw, 32px)",
             fontWeight: "900",
             color: "#000000",
-            marginBottom: "32px",
+            marginBottom: "clamp(24px, 4vw, 32px)",
           }}
         >
           Dashboard Overview
@@ -364,7 +367,8 @@ export default function AdminDashboard() {
               overflow: "hidden",
             }}
           >
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "700px" }}>
               <thead>
                 <tr style={{ backgroundColor: "#f3f4f6", borderBottom: "1px solid #e5e7eb" }}>
                   <th style={{ padding: "16px", textAlign: "left", fontSize: "12px", fontWeight: "700", color: "#6b7280", textTransform: "uppercase" }}>
@@ -417,6 +421,7 @@ export default function AdminDashboard() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
@@ -442,7 +447,8 @@ export default function AdminDashboard() {
               overflowY: "auto",
             }}
           >
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1000px" }}>
               <thead style={{ position: "sticky", top: 0, backgroundColor: "#f3f4f6", zIndex: 1 }}>
                 <tr style={{ borderBottom: "1px solid #e5e7eb" }}>
                   <th style={{ padding: "16px", textAlign: "left", fontSize: "12px", fontWeight: "700", color: "#6b7280", textTransform: "uppercase" }}>
@@ -546,6 +552,7 @@ export default function AdminDashboard() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </main>

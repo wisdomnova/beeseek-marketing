@@ -48,12 +48,13 @@ export default function AdminLoginPage() {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#f3f4f6",
+        padding: "20px",
       }}
     >
       <div
         style={{
           backgroundColor: "#ffffff",
-          padding: "48px",
+          padding: "clamp(32px, 8vw, 48px)",
           borderRadius: "8px",
           border: "1px solid #e5e7eb",
           width: "100%",

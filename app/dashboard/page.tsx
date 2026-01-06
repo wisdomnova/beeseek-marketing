@@ -100,9 +100,10 @@ export default function DashboardPage() {
     }
   };
 
-  const fetchContacts = async () => {
+  const fetchContacts = async (skipAutoAssign: boolean = false) => {
     try {
-      const response = await fetch("/api/contacts");
+      const url = skipAutoAssign ? "/api/contacts?skipAutoAssign=true" : "/api/contacts";
+      const response = await fetch(url);
       const data = await response.json();
       if (data.contacts) {
         setContacts(data.contacts);
@@ -150,7 +151,7 @@ export default function DashboardPage() {
       });
 
       if (response.ok) {
-        await fetchContacts();
+        await fetchContacts(true);
         
         // Show success message
         if (action === "message") {

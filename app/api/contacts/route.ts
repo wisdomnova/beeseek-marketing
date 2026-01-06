@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
+    const skipAutoAssign = request.nextUrl.searchParams.get('skipAutoAssign') === 'true';
     const now = new Date().toISOString();
 
     // Get all messaged contacts for this manager (permanent - no expiration check)
@@ -77,10 +78,10 @@ export async function GET(request: NextRequest) {
 
     if (unmessagedError) throw unmessagedError;
 
-    // If manager has less than 5 unmessaged contacts, assign new ones
+    // If manager has less than 5 unmessaged contacts, assign new ones (unless skipped)
     const unmessagedCount = unmessagedContacts?.length || 0;
     
-    if (unmessagedCount < 5) {
+    if (!skipAutoAssign && unmessagedCount < 5) {
       const needed = 5 - unmessagedCount;
       await assignContactsToManager(user.id, needed);
       

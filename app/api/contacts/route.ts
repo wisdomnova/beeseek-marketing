@@ -301,7 +301,7 @@ async function updateManagerStats(managerId: number) {
     // Get all contacts for this manager
     const { data: managerContacts } = await supabaseAdmin
       .from('manager_contacts')
-      .select('messaged, converted, rejected')
+      .select('messaged, converted, rejected, assigned_at, messaged_at')
       .eq('manager_id', managerId);
 
     if (!managerContacts) return;
@@ -315,8 +315,23 @@ async function updateManagerStats(managerId: number) {
       ? (stats.contacts_converted / stats.contacts_messaged) * 100
       : 0;
 
-    // Calculate days completed and missed (you'll need to implement this based on your logic)
-    // For now, we'll keep the existing values
+    // Calculate days completed and missed
+    const daysMap = new Map<string, boolean>();
+    
+    managerContacts.forEach(contact => {
+      const assignedDate = new Date(contact.assigned_at).toISOString().split('T')[0];
+      
+      // If contact was messaged on this day, mark day as completed
+      if (contact.messaged && contact.messaged_at) {
+        daysMap.set(assignedDate, true);
+      } else if (!daysMap.has(assignedDate)) {
+        // If no message on this day yet, mark as potentially missed
+        daysMap.set(assignedDate, false);
+      }
+    });
+
+    const days_completed = Array.from(daysMap.values()).filter(v => v).length;
+    const days_missed = Array.from(daysMap.values()).filter(v => !v).length;
 
     await supabaseAdmin
       .from('managers')
@@ -324,6 +339,8 @@ async function updateManagerStats(managerId: number) {
         contacts_messaged: stats.contacts_messaged,
         contacts_converted: stats.contacts_converted,
         conversion_rate: conversionRate.toFixed(2),
+        days_completed: days_completed,
+        days_missed: days_missed,
       })
       .eq('id', managerId);
   } catch (error) {

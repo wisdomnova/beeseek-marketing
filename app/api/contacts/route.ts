@@ -116,13 +116,13 @@ export async function GET(request: NextRequest) {
 
       if (refetchError) throw refetchError;
 
-      // Combine messaged + updated unmessaged contacts
-      const allContacts = [...(messagedContacts || []), ...(updatedUnmessaged || [])];
+      // Combine unmessaged + messaged contacts (unmessaged first so managers see new contacts at top)
+      const allContacts = [...(updatedUnmessaged || []), ...(messagedContacts || [])];
       return NextResponse.json({ contacts: allContacts });
     }
 
-    // Combine messaged + unmessaged contacts
-    const allContacts = [...(messagedContacts || []), ...(unmessagedContacts || [])];
+    // Combine unmessaged + messaged contacts (unmessaged first so managers see new contacts at top)
+    const allContacts = [...(unmessagedContacts || []), ...(messagedContacts || [])];
     return NextResponse.json({ contacts: allContacts });
   } catch (error) {
     console.error('Error fetching contacts:', error);
@@ -142,15 +142,15 @@ async function assignContactsToManager(managerId: number, count: number) {
     const expiresAt = new Date(now);
     expiresAt.setHours(23, 59, 59, 999); // Set to end of today
 
-    // Get all contact IDs that are currently assigned and not expired
-    const { data: assignedContactIds } = await supabaseAdmin
+    // Get all contact IDs that have been messaged, rejected, or converted by ANY manager
+    const { data: usedContactIds } = await supabaseAdmin
       .from('manager_contacts')
       .select('contact_id')
-      .gte('expires_at', now.toISOString());
+      .or('messaged.eq.true,rejected.eq.true,converted.eq.true');
 
-    const excludedIds = assignedContactIds?.map(ac => ac.contact_id) || [];
+    const excludedIds = usedContactIds?.map(ac => ac.contact_id) || [];
 
-    // Get available contacts (not currently assigned to anyone)
+    // Get available contacts (never messaged, rejected, or converted)
     let query = supabaseAdmin
       .from('contacts')
       .select('id');
@@ -162,34 +162,7 @@ async function assignContactsToManager(managerId: number, count: number) {
     const { data: availableContacts } = await query.limit(count);
 
     if (!availableContacts || availableContacts.length === 0) {
-      // If no available contacts, get contacts where messaged is false and expired
-      const { data: expiredUnmessaged } = await supabaseAdmin
-        .from('manager_contacts')
-        .select('contact_id')
-        .eq('messaged', false)
-        .lt('expires_at', now.toISOString())
-        .limit(count);
-
-      if (expiredUnmessaged && expiredUnmessaged.length > 0) {
-        // Assign these expired unmessaged contacts
-        const assignments = expiredUnmessaged.map(contact => ({
-          manager_id: managerId,
-          contact_id: contact.contact_id,
-          assigned_at: now.toISOString(),
-          expires_at: expiresAt.toISOString(),
-        }));
-
-        await supabaseAdmin.from('manager_contacts').insert(assignments);
-
-        // Log history
-        const historyEntries = assignments.map(a => ({
-          manager_id: managerId,
-          contact_id: a.contact_id,
-          action: 'assigned',
-          details: { source: 'expired_unmessaged' },
-        }));
-        await supabaseAdmin.from('contact_history').insert(historyEntries);
-      }
+      // If no available contacts, no more contacts in pool
       return;
     }
 

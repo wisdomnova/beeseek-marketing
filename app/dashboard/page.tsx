@@ -630,8 +630,11 @@ export default function DashboardPage() {
                 textAlign: "center",
               }}
             >
-              <p style={{ fontSize: "16px", color: "#6b7280", marginBottom: "16px" }}>
-                No contacts available. Click refresh to get your contact list.
+              <p style={{ fontSize: "18px", fontWeight: "700", color: "#000000", marginBottom: "12px" }}>
+                ✓ All contacts completed!
+              </p>
+              <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "24px" }}>
+                You've finished all available contacts in the pool. There are no more contacts to reach out to right now. Check back later when new contacts are added.
               </p>
               <button
                 onClick={handleLogout}

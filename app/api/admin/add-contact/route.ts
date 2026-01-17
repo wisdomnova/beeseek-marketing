@@ -23,6 +23,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if username already exists
+    const { data: existingContact, error: checkError } = await supabaseAdmin
+      .from('contacts')
+      .select('id')
+      .eq('username', username)
+      .single();
+
+    if (existingContact) {
+      return NextResponse.json(
+        { error: 'A contact with this username already exists' },
+        { status: 400 }
+      );
+    }
+
     // Auto-generate contact_id if not provided
     const finalContactId = contact_id || `C${Date.now().toString().slice(-8)}`;
 
